@@ -1,0 +1,692 @@
+\hypertarget{masterPanel_8ino}{}\section{master\+Panel.\+ino File Reference}
+\label{masterPanel_8ino}\index{master\+Panel.\+ino@{master\+Panel.\+ino}}
+
+
+Sketch for the Compressed Air Rocket Master Panel.  
+
+
+{\ttfamily \#include $<$Arduino.\+h$>$}\\*
+{\ttfamily \#include $<$stdint.\+h$>$}\\*
+{\ttfamily \#include $<$Wire.\+h$>$}\\*
+{\ttfamily \#include $<$X\+Bee.\+h$>$}\\*
+{\ttfamily \#include $<$Launch\+Data\+Packet.\+h$>$}\\*
+{\ttfamily \#include $<$L\+C\+D4\+Bit\+\_\+mod.\+h$>$}\\*
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{masterPanel_8ino_af22601eb964b24e375a5dad9c85a3a46}{N\+U\+M\+\_\+\+C\+H\+AR}~15
+\begin{DoxyCompactList}\small\item\em Define the number of charcters per row in the L\+CD display. \end{DoxyCompactList}\item 
+\#define \hyperlink{masterPanel_8ino_abeac387ee946b831a2d5f3ea8efa2cd6}{\+\_\+\+Arm\+Led\+Bit\+\_\+}~2
+\begin{DoxyCompactList}\small\item\em Define the Digital Output \# for the Arm Switch L\+ED. \end{DoxyCompactList}\item 
+\#define \hyperlink{masterPanel_8ino_aceced00e366c0b2de5b1f6a45e857af2}{\+\_\+\+Arm\+Switch\+Bit\+\_\+}~12
+\begin{DoxyCompactList}\small\item\em Define the Digital Input \# for the Arm Switch. \end{DoxyCompactList}\item 
+\#define \hyperlink{masterPanel_8ino_a7790df90c3031037ccd5b55d84e32858}{\+\_\+\+Launch\+Button\+Bit\+\_\+}~11
+\begin{DoxyCompactList}\small\item\em Define the Digital Input \# for the Launch Button. \end{DoxyCompactList}\item 
+\#define \hyperlink{masterPanel_8ino_a556344e1154b17e67f5c8a40e022be29}{\+\_\+\+Launch\+Led\+Bit\+\_\+}~3
+\begin{DoxyCompactList}\small\item\em Define the Digital Output \# for the Launch Button L\+ED. \end{DoxyCompactList}\item 
+\#define \hyperlink{masterPanel_8ino_a3091b65befbc4ba8ae2a2cd5a0ed50a9}{\+\_\+\+Safety\+Bit\+\_\+}~13
+\begin{DoxyCompactList}\small\item\em Define the Digital Input \# for the safety key. \end{DoxyCompactList}\item 
+\#define \hyperlink{masterPanel_8ino_a150478a9ca6eefa513c0a36f788bf8bd}{\+\_\+\+Analog\+Buttons\+\_\+}~0
+\begin{DoxyCompactList}\small\item\em Define the Analog Input \# for the momentary push buttons. \end{DoxyCompactList}\item 
+\#define \hyperlink{masterPanel_8ino_a088d470fd122b482dc087029b21f1f75}{\+\_\+\+Pressure\+Scale1\+\_\+}~1
+\begin{DoxyCompactList}\small\item\em Define the Analog Input \# for P\+O\+T1. \end{DoxyCompactList}\item 
+\#define \hyperlink{masterPanel_8ino_acef1a33ec0ad5ae6ca07e04f9d64fd2f}{\+\_\+\+Pressure\+Scale2\+\_\+}~2
+\begin{DoxyCompactList}\small\item\em Define the Analog Input \# for P\+O\+T2. \end{DoxyCompactList}\item 
+\#define \hyperlink{masterPanel_8ino_a9a8dc8e6e75e845a90d783b02b6be855}{\+\_\+pulse\+\_\+halfwidth\+\_\+}~100
+\begin{DoxyCompactList}\small\item\em Define the 1/2 period of the pulse used to flash the L\+ED in the launch button. \end{DoxyCompactList}\item 
+\#define \hyperlink{masterPanel_8ino_a6b982ea9a4c912acbfd98bbd5072e258}{\+\_\+zigbee\+\_\+timeout\+\_\+}~1000
+\begin{DoxyCompactList}\small\item\em Define the timeout for the zigbee communications. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{masterPanel_8ino_a47f529525de58eb550617cd09e49ecfe}{report\+Safety\+Status} (byte on\+Off)
+\begin{DoxyCompactList}\small\item\em Writes a character code to a specific location in the L\+CD screen to alert the user that the safety is on or off. \end{DoxyCompactList}\item 
+void \hyperlink{masterPanel_8ino_a949150efa4f2be80075eba8aca9aeaf4}{report\+Compressor\+Status} (byte on\+Off)
+\begin{DoxyCompactList}\small\item\em Writes a character code to a specific location in the L\+CD screen to alert the user that the compressor is on or off. \end{DoxyCompactList}\item 
+void \hyperlink{masterPanel_8ino_a0407b0e2d92c33214c76f4fc2e307904}{report\+Remote\+Enabled\+Status} (byte on\+Off)
+\begin{DoxyCompactList}\small\item\em Writes a character code to a specific location in the L\+CD screen to alert the user that the remote is enabled or disabled. \end{DoxyCompactList}\item 
+void \hyperlink{masterPanel_8ino_a0d61356b57e8ee0cba9a3fb5053f94a1}{report\+Pad\+Select} (byte pad\+Num)
+\begin{DoxyCompactList}\small\item\em Writes a character code to a specific location in the L\+CD screen to alert the user which pad(s) has been selected. \end{DoxyCompactList}\item 
+void \hyperlink{masterPanel_8ino_a44d9c6f1f09925b57bb24c085facec8b}{report\+Error} (byte error\+Num)
+\begin{DoxyCompactList}\small\item\em Writes a character code to a specific location in the L\+CD screen to alert the user of an error. \end{DoxyCompactList}\item 
+void \hyperlink{masterPanel_8ino_a83738b455d61681c882d51672b269312}{report\+Local\+Arm\+Status} (byte on\+Off)
+\begin{DoxyCompactList}\small\item\em Writes a character code to a specific location in the L\+CD screen to alert the user that the local arm is on or off. \end{DoxyCompactList}\item 
+void \hyperlink{masterPanel_8ino_a8d7691e0d4b12de3a7ad70f25f29bb0a}{report\+Remote\+Arm\+Status} (byte on\+Off)
+\begin{DoxyCompactList}\small\item\em Writes a character code to a specific location in the L\+CD screen to alert the user that the remote arm is on or off. \end{DoxyCompactList}\item 
+void \hyperlink{masterPanel_8ino_a274c6c0eb81e095d9f6e1a123d412fc4}{report\+Remote\+Launch\+Status} (byte on\+Off)
+\begin{DoxyCompactList}\small\item\em Writes a character code to a specific location in the L\+CD screen to alert the user that the remote launch is on or off. \end{DoxyCompactList}\item 
+void \hyperlink{masterPanel_8ino_a73a70351164ae78e12e03c59e2221bb5}{report\+Local\+Launch\+Status} (byte on\+Off)
+\begin{DoxyCompactList}\small\item\em Writes a character code to a specific location in the L\+CD screen to alert the user that the local launch is on or off. \end{DoxyCompactList}\item 
+void \hyperlink{masterPanel_8ino_ad70a4dcff0867d71a1c47b1b7d12ba86}{report\+Pressure} (int pressure1, int pressure2)
+\begin{DoxyCompactList}\small\item\em Writes the two pressure values (in psi) as 3 digit integers specific locations in the L\+CD screeen to inform the user. \end{DoxyCompactList}\item 
+int \hyperlink{masterPanel_8ino_ae6558c7c3eabc1f423c0198aa3034742}{get\+\_\+key} (unsigned int input)
+\begin{DoxyCompactList}\small\item\em This function is passed the A\+DC value. \end{DoxyCompactList}\item 
+byte \hyperlink{masterPanel_8ino_ace84c74ec48d351b8773c66146229cd3}{is\+Safety\+On} ()
+\begin{DoxyCompactList}\small\item\em Returns the H\+I\+G\+H/\+L\+OW state of the safety key pin. \end{DoxyCompactList}\item 
+byte \hyperlink{masterPanel_8ino_a3492c507d35bafe0970abebf4b243401}{is\+Arm\+Switch\+Off} ()
+\begin{DoxyCompactList}\small\item\em Returns the On/\+Off state of the arm switch. \end{DoxyCompactList}\item 
+byte \hyperlink{masterPanel_8ino_a43f47cf71ffcc34435d649543a3b2b35}{is\+Launch\+Button\+Off} ()
+\begin{DoxyCompactList}\small\item\em Returns the On/\+Off state of the launch button. \end{DoxyCompactList}\item 
+void \hyperlink{masterPanel_8ino_a407b3e38ec5a6e70511c19cf0c03b89d}{set\+Arm\+Switch\+Led\+State} (int state)
+\begin{DoxyCompactList}\small\item\em Supplies power to the Arm Switch and therefore supplies power to both the switch and the L\+ED. \end{DoxyCompactList}\item 
+void \hyperlink{masterPanel_8ino_a036de83adbfc4e042ffb2985e566dd46}{set\+Launch\+Button\+Led\+State} (int state)
+\begin{DoxyCompactList}\small\item\em Turns the Launch button L\+ED on or off. \end{DoxyCompactList}\item 
+void \hyperlink{masterPanel_8ino_aa52415de65bdd171ce3eefcf2439d5bb}{read\+Zigbee} ()
+\begin{DoxyCompactList}\small\item\em Checks if there is data waiting in the Zigbee. \end{DoxyCompactList}\item 
+void \hyperlink{masterPanel_8ino_a31e996ec809ac8f9c7b059e9ec1662dd}{write\+Zigbee\+Remote} ()
+\begin{DoxyCompactList}\small\item\em Checks the current state of the master controller swiches, updates the data appropriate for the Remote Controller and sends a data packet to the Remote Controller via Zigbee. \end{DoxyCompactList}\item 
+void \hyperlink{masterPanel_8ino_a5c5a3e1e876636d4fe4d0fd95c3faa94}{write\+Zigbee\+Pad} ()
+\begin{DoxyCompactList}\small\item\em Checks the current state of the master controller swiches, updates the data appropriate for the Pad Controller and sends a data packet to the Pad Controller via Zigbee. \end{DoxyCompactList}\item 
+void \hyperlink{masterPanel_8ino_a0e5ef5e02f999a751b31aeb3ec0729b0}{blink\+Launch\+Led} ()
+\begin{DoxyCompactList}\small\item\em Toggles the on/off state of the Launch L\+ED bit. \end{DoxyCompactList}\item 
+int \hyperlink{masterPanel_8ino_a5a61d5b26e1f6e65e1cf91cde7dc37f6}{compute\+Pressure} (int pressure\+Read, int pressure\+Cal)
+\begin{DoxyCompactList}\small\item\em Computes the pressure in psi from the A\+DC pressure reading and the A\+DC calibration P\+OT reading. \end{DoxyCompactList}\item 
+void \hyperlink{masterPanel_8ino_a875972e5579573df843bbc6cab825821}{read\+Panel} ()
+\begin{DoxyCompactList}\small\item\em Reads all switch states from the Master Panel, updates the data (Launch\+Data\+Packet instance), sends the data over Zigbee, and checks for any data waiting on the Zigbee. \end{DoxyCompactList}\item 
+void \hyperlink{masterPanel_8ino_a4fc01d736fe50cf5b977f755b675f11d}{setup} ()
+\item 
+void \hyperlink{masterPanel_8ino_afe461d27b9c48d5921c00d521181f12f}{loop} ()
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+L\+C\+D4\+Bit\+\_\+mod \hyperlink{masterPanel_8ino_a41dddf59ae53b20320d0abf3498a563f}{lcd} = L\+C\+D4\+Bit\+\_\+mod(2)
+\begin{DoxyCompactList}\small\item\em Create object to control an L\+CD with 2 lines of text. \end{DoxyCompactList}\item 
+static const int \hyperlink{masterPanel_8ino_a3825b3540381c5eacce025d7c96ec83a}{adc\+\_\+key\+\_\+val} \mbox{[}5\mbox{]} =\{30, 360, 760 \}
+\begin{DoxyCompactList}\small\item\em Define the Analog values which correspond to the three momentary push buttons installed in the Master Panel. \end{DoxyCompactList}\item 
+static const int \hyperlink{masterPanel_8ino_a872c8b81f62c5a5afb73ba8e93422e1c}{N\+U\+M\+\_\+\+K\+E\+YS} = 3
+\begin{DoxyCompactList}\small\item\em Define the number of buttons to be read using Analog pin \#0. \end{DoxyCompactList}\item 
+int \hyperlink{masterPanel_8ino_a0cea6186dd3e0885b2ab52d918f062ad}{adc\+\_\+key\+\_\+in}
+\begin{DoxyCompactList}\small\item\em Store the Analog Input Value when reading the 3 push buttons. \end{DoxyCompactList}\item 
+int \hyperlink{masterPanel_8ino_a35af0be900467fedbb610bd6ea65ed78}{key} =-\/1
+\begin{DoxyCompactList}\small\item\em Once we decypher the button pushed, store the button \# here. \end{DoxyCompactList}\item 
+int \hyperlink{masterPanel_8ino_ab3d48dbe76030874dd18eb3c6780330e}{oldkey} =-\/1
+\begin{DoxyCompactList}\small\item\em Store the previous button pushed. \end{DoxyCompactList}\item 
+char \hyperlink{masterPanel_8ino_a0ea7c2d76ab718bd82cf6259b26ed3ed}{number} \mbox{[}$\,$\mbox{]}
+\begin{DoxyCompactList}\small\item\em Character string for storing integers to be displayed on the L\+CD screen. \end{DoxyCompactList}\item 
+int \hyperlink{masterPanel_8ino_a3e1010b728ac3d5d91ffc657006d630f}{pressure\+Cal1}
+\begin{DoxyCompactList}\small\item\em Store the Analog Input value for the pressure calibration P\+OT \#1. \end{DoxyCompactList}\item 
+int \hyperlink{masterPanel_8ino_a686c48254491c41288fdf685b232594d}{pressure\+Cal2}
+\begin{DoxyCompactList}\small\item\em Store the Analog Input value for the pressure calibration P\+OT \#2. \end{DoxyCompactList}\item 
+byte \hyperlink{masterPanel_8ino_a3122ae67163a917df3ce95816c7c44e7}{pulse} = 0
+\begin{DoxyCompactList}\small\item\em Track the on/off state of the launch button L\+ED when the L\+ED is flashing. \end{DoxyCompactList}\item 
+long \hyperlink{masterPanel_8ino_af8d9d76d18b6aee4b209d4f3b9f2d8d3}{time\+Since\+Last\+Pulse} = 0
+\begin{DoxyCompactList}\small\item\em Time since the last toggle of the L\+ED on/off status. \end{DoxyCompactList}\item 
+long \hyperlink{masterPanel_8ino_af44f6a2e4c00006fb058d00348168159}{time\+Since\+Last\+Pad\+Signal} = 0
+\begin{DoxyCompactList}\small\item\em Time since the last good Zigbee communication with the launch pad. \end{DoxyCompactList}\item 
+long \hyperlink{masterPanel_8ino_a3840f059f2cf5d2544a8eb65120ecc31}{time\+Since\+Last\+Remote\+Signal} = 0
+\begin{DoxyCompactList}\small\item\em Time since the last good Zigbee communication with the Remote Panel. \end{DoxyCompactList}\item 
+X\+Bee \hyperlink{masterPanel_8ino_a18bbd7dece9ef587254b08710426fd17}{xbee} = X\+Bee()
+\begin{DoxyCompactList}\small\item\em Instance of the Zigbee Class. \end{DoxyCompactList}\item 
+Launch\+Data\+Packet \hyperlink{masterPanel_8ino_a2581ee7316bbd0b2c1f26d7892d9383b}{data} = Launch\+Data\+Packet(\hyperlink{masterPanel_8ino_a18bbd7dece9ef587254b08710426fd17}{xbee})
+\begin{DoxyCompactList}\small\item\em Instance of the Launch\+Data\+Packet Class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Sketch for the Compressed Air Rocket Master Panel. 
+
+This sketch monitors the switches and buttons in the Master Panel, writes data to the L\+CD, and communicates with the Remote Panel and Pad using Zigbee \begin{DoxySeeAlso}{See also}
+Launch\+Pad\+Packet.\+h
+\end{DoxySeeAlso}
+L\+CD Layout This section of documentation describes the complete layout of the L\+CD Screen by the Master Panel program. The L\+CD screen is 16 x 2 characters. \begin{DoxyVerb}                      Character Columns
+                                111111
+                      0123456789012345
+      Line #1         aa S C R Ppp Ex
+      Line #2         bb LA RA RL LL
+\end{DoxyVerb}
+
+
+aa = pressure \#1 and bb = pressure \#2. Both are 2 digit integers. ~\newline
+ S = safety on. S is removed when safety is off ~\newline
+ C = compressor on, C is removed when compressor is off ~\newline
+ R = remote enabled, R is removed when remote is disabled. ~\newline
+ Ppp is P12 (both pads enabled). P1\+\_\+ (only pad1 enabled). P\+\_\+2 (only pad2 enabled) ~\newline
+ Ex = Error and x is an integer from 0 to 9 (erro code) ~\newline
+ LA = Local Arm, LA removed when local arm is off or not authorized. ~\newline
+ RA = Remote Arm, RA removed when remote arm off or not authorized. ~\newline
+ RL = Remote Launch, RL only on when remote launch is authorized and button pressed. ~\newline
+ LL = Local Launch, LL only on when local launch is authorized and button pressed. 
+
+\subsection{Macro Definition Documentation}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!\+\_\+\+Analog\+Buttons\+\_\+@{\+\_\+\+Analog\+Buttons\+\_\+}}
+\index{\+\_\+\+Analog\+Buttons\+\_\+@{\+\_\+\+Analog\+Buttons\+\_\+}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{\+\_\+\+Analog\+Buttons\+\_\+}{\_AnalogButtons\_}}]{\setlength{\rightskip}{0pt plus 5cm}\#define \+\_\+\+Analog\+Buttons\+\_\+~0}\hypertarget{masterPanel_8ino_a150478a9ca6eefa513c0a36f788bf8bd}{}\label{masterPanel_8ino_a150478a9ca6eefa513c0a36f788bf8bd}
+
+
+Define the Analog Input \# for the momentary push buttons. 
+
+Master controller has 3 momentary push button switches (S\+W1, S\+W2, and S\+W3). All three of these switches have one terminal wired to a single resistor (R0). Each switch has the other terminal wired to analog pin 0 and a seperate resistor. S\+W1 is wired to R1, S\+W2 wired to R2, and S\+W3 wired to R3. R1, R2, and R3 each form a voltage divider with R0 and the resistor values are chosen to produce 3 distinct voltages at analog pin 0. \index{master\+Panel.\+ino@{master\+Panel.\+ino}!\+\_\+\+Arm\+Led\+Bit\+\_\+@{\+\_\+\+Arm\+Led\+Bit\+\_\+}}
+\index{\+\_\+\+Arm\+Led\+Bit\+\_\+@{\+\_\+\+Arm\+Led\+Bit\+\_\+}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{\+\_\+\+Arm\+Led\+Bit\+\_\+}{\_ArmLedBit\_}}]{\setlength{\rightskip}{0pt plus 5cm}\#define \+\_\+\+Arm\+Led\+Bit\+\_\+~2}\hypertarget{masterPanel_8ino_abeac387ee946b831a2d5f3ea8efa2cd6}{}\label{masterPanel_8ino_abeac387ee946b831a2d5f3ea8efa2cd6}
+
+
+Define the Digital Output \# for the Arm Switch L\+ED. 
+
+Master controller has an Arm Toggle switch with build-\/in L\+ED. This output does not control the L\+ED. Instead it supplies power to the L\+ED and switch combo. L\+ED will not turn on without power. L\+ED will turn on when it has power and the toggle switch is on. \index{master\+Panel.\+ino@{master\+Panel.\+ino}!\+\_\+\+Arm\+Switch\+Bit\+\_\+@{\+\_\+\+Arm\+Switch\+Bit\+\_\+}}
+\index{\+\_\+\+Arm\+Switch\+Bit\+\_\+@{\+\_\+\+Arm\+Switch\+Bit\+\_\+}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{\+\_\+\+Arm\+Switch\+Bit\+\_\+}{\_ArmSwitchBit\_}}]{\setlength{\rightskip}{0pt plus 5cm}\#define \+\_\+\+Arm\+Switch\+Bit\+\_\+~12}\hypertarget{masterPanel_8ino_aceced00e366c0b2de5b1f6a45e857af2}{}\label{masterPanel_8ino_aceced00e366c0b2de5b1f6a45e857af2}
+
+
+Define the Digital Input \# for the Arm Switch. 
+
+This input monitors the Master controller Arm Toggle switch (D\+P\+ST). \index{master\+Panel.\+ino@{master\+Panel.\+ino}!\+\_\+\+Launch\+Button\+Bit\+\_\+@{\+\_\+\+Launch\+Button\+Bit\+\_\+}}
+\index{\+\_\+\+Launch\+Button\+Bit\+\_\+@{\+\_\+\+Launch\+Button\+Bit\+\_\+}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{\+\_\+\+Launch\+Button\+Bit\+\_\+}{\_LaunchButtonBit\_}}]{\setlength{\rightskip}{0pt plus 5cm}\#define \+\_\+\+Launch\+Button\+Bit\+\_\+~11}\hypertarget{masterPanel_8ino_a7790df90c3031037ccd5b55d84e32858}{}\label{masterPanel_8ino_a7790df90c3031037ccd5b55d84e32858}
+
+
+Define the Digital Input \# for the Launch Button. 
+
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!\+\_\+\+Launch\+Led\+Bit\+\_\+@{\+\_\+\+Launch\+Led\+Bit\+\_\+}}
+\index{\+\_\+\+Launch\+Led\+Bit\+\_\+@{\+\_\+\+Launch\+Led\+Bit\+\_\+}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{\+\_\+\+Launch\+Led\+Bit\+\_\+}{\_LaunchLedBit\_}}]{\setlength{\rightskip}{0pt plus 5cm}\#define \+\_\+\+Launch\+Led\+Bit\+\_\+~3}\hypertarget{masterPanel_8ino_a556344e1154b17e67f5c8a40e022be29}{}\label{masterPanel_8ino_a556344e1154b17e67f5c8a40e022be29}
+
+
+Define the Digital Output \# for the Launch Button L\+ED. 
+
+Master controller has a Launch Button with build in L\+ED. This pin turns the built in L\+ED on and off. The button does not control the L\+ED. \index{master\+Panel.\+ino@{master\+Panel.\+ino}!\+\_\+\+Pressure\+Scale1\+\_\+@{\+\_\+\+Pressure\+Scale1\+\_\+}}
+\index{\+\_\+\+Pressure\+Scale1\+\_\+@{\+\_\+\+Pressure\+Scale1\+\_\+}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{\+\_\+\+Pressure\+Scale1\+\_\+}{\_PressureScale1\_}}]{\setlength{\rightskip}{0pt plus 5cm}\#define \+\_\+\+Pressure\+Scale1\+\_\+~1}\hypertarget{masterPanel_8ino_a088d470fd122b482dc087029b21f1f75}{}\label{masterPanel_8ino_a088d470fd122b482dc087029b21f1f75}
+
+
+Define the Analog Input \# for P\+O\+T1. 
+
+Master controller has 2 P\+O\+Ts used to calibrate the pressure readings displayed on the L\+CD screen. The center pin of the P\+OT is connected to the analog Input. \index{master\+Panel.\+ino@{master\+Panel.\+ino}!\+\_\+\+Pressure\+Scale2\+\_\+@{\+\_\+\+Pressure\+Scale2\+\_\+}}
+\index{\+\_\+\+Pressure\+Scale2\+\_\+@{\+\_\+\+Pressure\+Scale2\+\_\+}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{\+\_\+\+Pressure\+Scale2\+\_\+}{\_PressureScale2\_}}]{\setlength{\rightskip}{0pt plus 5cm}\#define \+\_\+\+Pressure\+Scale2\+\_\+~2}\hypertarget{masterPanel_8ino_acef1a33ec0ad5ae6ca07e04f9d64fd2f}{}\label{masterPanel_8ino_acef1a33ec0ad5ae6ca07e04f9d64fd2f}
+
+
+Define the Analog Input \# for P\+O\+T2. 
+
+Master controller has 2 P\+O\+Ts used to calibrate the pressure readings displayed on the L\+CD screen. The center pin of the P\+OT is connected to the analog Input. \index{master\+Panel.\+ino@{master\+Panel.\+ino}!\+\_\+pulse\+\_\+halfwidth\+\_\+@{\+\_\+pulse\+\_\+halfwidth\+\_\+}}
+\index{\+\_\+pulse\+\_\+halfwidth\+\_\+@{\+\_\+pulse\+\_\+halfwidth\+\_\+}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{\+\_\+pulse\+\_\+halfwidth\+\_\+}{\_pulse\_halfwidth\_}}]{\setlength{\rightskip}{0pt plus 5cm}\#define \+\_\+pulse\+\_\+halfwidth\+\_\+~100}\hypertarget{masterPanel_8ino_a9a8dc8e6e75e845a90d783b02b6be855}{}\label{masterPanel_8ino_a9a8dc8e6e75e845a90d783b02b6be855}
+
+
+Define the 1/2 period of the pulse used to flash the L\+ED in the launch button. 
+
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!\+\_\+\+Safety\+Bit\+\_\+@{\+\_\+\+Safety\+Bit\+\_\+}}
+\index{\+\_\+\+Safety\+Bit\+\_\+@{\+\_\+\+Safety\+Bit\+\_\+}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{\+\_\+\+Safety\+Bit\+\_\+}{\_SafetyBit\_}}]{\setlength{\rightskip}{0pt plus 5cm}\#define \+\_\+\+Safety\+Bit\+\_\+~13}\hypertarget{masterPanel_8ino_a3091b65befbc4ba8ae2a2cd5a0ed50a9}{}\label{masterPanel_8ino_a3091b65befbc4ba8ae2a2cd5a0ed50a9}
+
+
+Define the Digital Input \# for the safety key. 
+
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!\+\_\+zigbee\+\_\+timeout\+\_\+@{\+\_\+zigbee\+\_\+timeout\+\_\+}}
+\index{\+\_\+zigbee\+\_\+timeout\+\_\+@{\+\_\+zigbee\+\_\+timeout\+\_\+}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{\+\_\+zigbee\+\_\+timeout\+\_\+}{\_zigbee\_timeout\_}}]{\setlength{\rightskip}{0pt plus 5cm}\#define \+\_\+zigbee\+\_\+timeout\+\_\+~1000}\hypertarget{masterPanel_8ino_a6b982ea9a4c912acbfd98bbd5072e258}{}\label{masterPanel_8ino_a6b982ea9a4c912acbfd98bbd5072e258}
+
+
+Define the timeout for the zigbee communications. 
+
+Error occurs if the time since the last communicaitons exceeds the timeout. \index{master\+Panel.\+ino@{master\+Panel.\+ino}!N\+U\+M\+\_\+\+C\+H\+AR@{N\+U\+M\+\_\+\+C\+H\+AR}}
+\index{N\+U\+M\+\_\+\+C\+H\+AR@{N\+U\+M\+\_\+\+C\+H\+AR}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{N\+U\+M\+\_\+\+C\+H\+AR}{NUM\_CHAR}}]{\setlength{\rightskip}{0pt plus 5cm}\#define N\+U\+M\+\_\+\+C\+H\+AR~15}\hypertarget{masterPanel_8ino_af22601eb964b24e375a5dad9c85a3a46}{}\label{masterPanel_8ino_af22601eb964b24e375a5dad9c85a3a46}
+
+
+Define the number of charcters per row in the L\+CD display. 
+
+
+
+\subsection{Function Documentation}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!blink\+Launch\+Led@{blink\+Launch\+Led}}
+\index{blink\+Launch\+Led@{blink\+Launch\+Led}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{blink\+Launch\+Led()}{blinkLaunchLed()}}]{\setlength{\rightskip}{0pt plus 5cm}void blink\+Launch\+Led (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_a0e5ef5e02f999a751b31aeb3ec0729b0}{}\label{masterPanel_8ino_a0e5ef5e02f999a751b31aeb3ec0729b0}
+
+
+Toggles the on/off state of the Launch L\+ED bit. 
+
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!compute\+Pressure@{compute\+Pressure}}
+\index{compute\+Pressure@{compute\+Pressure}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{compute\+Pressure(int pressure\+Read, int pressure\+Cal)}{computePressure(int pressureRead, int pressureCal)}}]{\setlength{\rightskip}{0pt plus 5cm}int compute\+Pressure (
+\begin{DoxyParamCaption}
+\item[{int}]{pressure\+Read, }
+\item[{int}]{pressure\+Cal}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_a5a61d5b26e1f6e65e1cf91cde7dc37f6}{}\label{masterPanel_8ino_a5a61d5b26e1f6e65e1cf91cde7dc37f6}
+
+
+Computes the pressure in psi from the A\+DC pressure reading and the A\+DC calibration P\+OT reading. 
+
+The computed pressure is rounded down to the nearest integer in units of psi.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pressure\+Read} & -\/ int -\/ the A\+DC value from the pad. \\
+\hline
+{\em pressure\+Cal} & -\/ int -\/ the A\+DC value from the calibation P\+OT.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int -\/ The computed pressure rounded down to the nearest integer. 
+\end{DoxyReturn}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!get\+\_\+key@{get\+\_\+key}}
+\index{get\+\_\+key@{get\+\_\+key}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{get\+\_\+key(unsigned int input)}{get\_key(unsigned int input)}}]{\setlength{\rightskip}{0pt plus 5cm}int get\+\_\+key (
+\begin{DoxyParamCaption}
+\item[{unsigned int}]{input}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_ae6558c7c3eabc1f423c0198aa3034742}{}\label{masterPanel_8ino_ae6558c7c3eabc1f423c0198aa3034742}
+
+
+This function is passed the A\+DC value. 
+
+It examines the A\+DC value to determine which key was pressed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & -\/ unsigned int -\/ value from analog pin A\+DC\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int -\/1 = no button pressed, 1 = Button \#1, 2 = Button \#2, 3 = Button \#3 
+\end{DoxyReturn}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!is\+Arm\+Switch\+Off@{is\+Arm\+Switch\+Off}}
+\index{is\+Arm\+Switch\+Off@{is\+Arm\+Switch\+Off}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{is\+Arm\+Switch\+Off()}{isArmSwitchOff()}}]{\setlength{\rightskip}{0pt plus 5cm}byte is\+Arm\+Switch\+Off (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_a3492c507d35bafe0970abebf4b243401}{}\label{masterPanel_8ino_a3492c507d35bafe0970abebf4b243401}
+
+
+Returns the On/\+Off state of the arm switch. 
+
+\begin{DoxyReturn}{Returns}
+byte -\/ H\+I\+GH -\/ Arm switch is off, L\+OW -\/ Arm switch is on. 
+\end{DoxyReturn}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!is\+Launch\+Button\+Off@{is\+Launch\+Button\+Off}}
+\index{is\+Launch\+Button\+Off@{is\+Launch\+Button\+Off}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{is\+Launch\+Button\+Off()}{isLaunchButtonOff()}}]{\setlength{\rightskip}{0pt plus 5cm}byte is\+Launch\+Button\+Off (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_a43f47cf71ffcc34435d649543a3b2b35}{}\label{masterPanel_8ino_a43f47cf71ffcc34435d649543a3b2b35}
+
+
+Returns the On/\+Off state of the launch button. 
+
+\begin{DoxyReturn}{Returns}
+byte -\/ H\+I\+GH -\/ Launch button is off, L\+OW -\/ Launch button is on. 
+\end{DoxyReturn}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!is\+Safety\+On@{is\+Safety\+On}}
+\index{is\+Safety\+On@{is\+Safety\+On}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{is\+Safety\+On()}{isSafetyOn()}}]{\setlength{\rightskip}{0pt plus 5cm}byte is\+Safety\+On (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_ace84c74ec48d351b8773c66146229cd3}{}\label{masterPanel_8ino_ace84c74ec48d351b8773c66146229cd3}
+
+
+Returns the H\+I\+G\+H/\+L\+OW state of the safety key pin. 
+
+\begin{DoxyReturn}{Returns}
+byte -\/ H\+I\+GH -\/ safety key is removed, L\+OW -\/ safety key is in. 
+\end{DoxyReturn}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!loop@{loop}}
+\index{loop@{loop}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{loop()}{loop()}}]{\setlength{\rightskip}{0pt plus 5cm}void loop (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_afe461d27b9c48d5921c00d521181f12f}{}\label{masterPanel_8ino_afe461d27b9c48d5921c00d521181f12f}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!read\+Panel@{read\+Panel}}
+\index{read\+Panel@{read\+Panel}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{read\+Panel()}{readPanel()}}]{\setlength{\rightskip}{0pt plus 5cm}void read\+Panel (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_a875972e5579573df843bbc6cab825821}{}\label{masterPanel_8ino_a875972e5579573df843bbc6cab825821}
+
+
+Reads all switch states from the Master Panel, updates the data (Launch\+Data\+Packet instance), sends the data over Zigbee, and checks for any data waiting on the Zigbee. 
+
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!read\+Zigbee@{read\+Zigbee}}
+\index{read\+Zigbee@{read\+Zigbee}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{read\+Zigbee()}{readZigbee()}}]{\setlength{\rightskip}{0pt plus 5cm}void read\+Zigbee (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_aa52415de65bdd171ce3eefcf2439d5bb}{}\label{masterPanel_8ino_aa52415de65bdd171ce3eefcf2439d5bb}
+
+
+Checks if there is data waiting in the Zigbee. 
+
+If data is present, it reads the data and stores it in class variables and updates the L\+CD display acording to the data content. \index{master\+Panel.\+ino@{master\+Panel.\+ino}!report\+Compressor\+Status@{report\+Compressor\+Status}}
+\index{report\+Compressor\+Status@{report\+Compressor\+Status}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{report\+Compressor\+Status(byte on\+Off)}{reportCompressorStatus(byte onOff)}}]{\setlength{\rightskip}{0pt plus 5cm}void report\+Compressor\+Status (
+\begin{DoxyParamCaption}
+\item[{byte}]{on\+Off}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_a949150efa4f2be80075eba8aca9aeaf4}{}\label{masterPanel_8ino_a949150efa4f2be80075eba8aca9aeaf4}
+
+
+Writes a character code to a specific location in the L\+CD screen to alert the user that the compressor is on or off. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em on\+Off} & -\/ byte -\/ H\+I\+GH = compressor on, L\+OW = compressor off \\
+\hline
+\end{DoxyParams}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!report\+Error@{report\+Error}}
+\index{report\+Error@{report\+Error}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{report\+Error(byte error\+Num)}{reportError(byte errorNum)}}]{\setlength{\rightskip}{0pt plus 5cm}void report\+Error (
+\begin{DoxyParamCaption}
+\item[{byte}]{error\+Num}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_a44d9c6f1f09925b57bb24c085facec8b}{}\label{masterPanel_8ino_a44d9c6f1f09925b57bb24c085facec8b}
+
+
+Writes a character code to a specific location in the L\+CD screen to alert the user of an error. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em error\+Num} & -\/ byte -\/ 0 = none, 1-\/9 = error codes 1 through 9 \\
+\hline
+\end{DoxyParams}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!report\+Local\+Arm\+Status@{report\+Local\+Arm\+Status}}
+\index{report\+Local\+Arm\+Status@{report\+Local\+Arm\+Status}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{report\+Local\+Arm\+Status(byte on\+Off)}{reportLocalArmStatus(byte onOff)}}]{\setlength{\rightskip}{0pt plus 5cm}void report\+Local\+Arm\+Status (
+\begin{DoxyParamCaption}
+\item[{byte}]{on\+Off}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_a83738b455d61681c882d51672b269312}{}\label{masterPanel_8ino_a83738b455d61681c882d51672b269312}
+
+
+Writes a character code to a specific location in the L\+CD screen to alert the user that the local arm is on or off. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em on\+Off} & -\/ byte -\/ H\+I\+GH = Local Arm on, L\+OW = Local Arm off \\
+\hline
+\end{DoxyParams}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!report\+Local\+Launch\+Status@{report\+Local\+Launch\+Status}}
+\index{report\+Local\+Launch\+Status@{report\+Local\+Launch\+Status}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{report\+Local\+Launch\+Status(byte on\+Off)}{reportLocalLaunchStatus(byte onOff)}}]{\setlength{\rightskip}{0pt plus 5cm}void report\+Local\+Launch\+Status (
+\begin{DoxyParamCaption}
+\item[{byte}]{on\+Off}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_a73a70351164ae78e12e03c59e2221bb5}{}\label{masterPanel_8ino_a73a70351164ae78e12e03c59e2221bb5}
+
+
+Writes a character code to a specific location in the L\+CD screen to alert the user that the local launch is on or off. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em on\+Off} & -\/ byte -\/ H\+I\+GH = Local Launch on, L\+OW = Local Launch off \\
+\hline
+\end{DoxyParams}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!report\+Pad\+Select@{report\+Pad\+Select}}
+\index{report\+Pad\+Select@{report\+Pad\+Select}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{report\+Pad\+Select(byte pad\+Num)}{reportPadSelect(byte padNum)}}]{\setlength{\rightskip}{0pt plus 5cm}void report\+Pad\+Select (
+\begin{DoxyParamCaption}
+\item[{byte}]{pad\+Num}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_a0d61356b57e8ee0cba9a3fb5053f94a1}{}\label{masterPanel_8ino_a0d61356b57e8ee0cba9a3fb5053f94a1}
+
+
+Writes a character code to a specific location in the L\+CD screen to alert the user which pad(s) has been selected. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pad\+Num} & -\/ byte -\/ 0 = none, 1 = pad \#1, 2 = pad \#2, 3 = both pads \\
+\hline
+\end{DoxyParams}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!report\+Pressure@{report\+Pressure}}
+\index{report\+Pressure@{report\+Pressure}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{report\+Pressure(int pressure1, int pressure2)}{reportPressure(int pressure1, int pressure2)}}]{\setlength{\rightskip}{0pt plus 5cm}void report\+Pressure (
+\begin{DoxyParamCaption}
+\item[{int}]{pressure1, }
+\item[{int}]{pressure2}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_ad70a4dcff0867d71a1c47b1b7d12ba86}{}\label{masterPanel_8ino_ad70a4dcff0867d71a1c47b1b7d12ba86}
+
+
+Writes the two pressure values (in psi) as 3 digit integers specific locations in the L\+CD screeen to inform the user. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pressure1} & -\/ int -\/ pressure \#1 in psi \\
+\hline
+{\em pressure2} & -\/ int -\/ pressure \#2 in psi \\
+\hline
+\end{DoxyParams}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!report\+Remote\+Arm\+Status@{report\+Remote\+Arm\+Status}}
+\index{report\+Remote\+Arm\+Status@{report\+Remote\+Arm\+Status}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{report\+Remote\+Arm\+Status(byte on\+Off)}{reportRemoteArmStatus(byte onOff)}}]{\setlength{\rightskip}{0pt plus 5cm}void report\+Remote\+Arm\+Status (
+\begin{DoxyParamCaption}
+\item[{byte}]{on\+Off}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_a8d7691e0d4b12de3a7ad70f25f29bb0a}{}\label{masterPanel_8ino_a8d7691e0d4b12de3a7ad70f25f29bb0a}
+
+
+Writes a character code to a specific location in the L\+CD screen to alert the user that the remote arm is on or off. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em on\+Off} & -\/ byte -\/ H\+I\+GH = Remote Arm on, L\+OW = Remote Arm off \\
+\hline
+\end{DoxyParams}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!report\+Remote\+Enabled\+Status@{report\+Remote\+Enabled\+Status}}
+\index{report\+Remote\+Enabled\+Status@{report\+Remote\+Enabled\+Status}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{report\+Remote\+Enabled\+Status(byte on\+Off)}{reportRemoteEnabledStatus(byte onOff)}}]{\setlength{\rightskip}{0pt plus 5cm}void report\+Remote\+Enabled\+Status (
+\begin{DoxyParamCaption}
+\item[{byte}]{on\+Off}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_a0407b0e2d92c33214c76f4fc2e307904}{}\label{masterPanel_8ino_a0407b0e2d92c33214c76f4fc2e307904}
+
+
+Writes a character code to a specific location in the L\+CD screen to alert the user that the remote is enabled or disabled. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em on\+Off} & -\/ byte -\/ H\+I\+GH = remote enabled, L\+OW = remote disabled \\
+\hline
+\end{DoxyParams}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!report\+Remote\+Launch\+Status@{report\+Remote\+Launch\+Status}}
+\index{report\+Remote\+Launch\+Status@{report\+Remote\+Launch\+Status}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{report\+Remote\+Launch\+Status(byte on\+Off)}{reportRemoteLaunchStatus(byte onOff)}}]{\setlength{\rightskip}{0pt plus 5cm}void report\+Remote\+Launch\+Status (
+\begin{DoxyParamCaption}
+\item[{byte}]{on\+Off}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_a274c6c0eb81e095d9f6e1a123d412fc4}{}\label{masterPanel_8ino_a274c6c0eb81e095d9f6e1a123d412fc4}
+
+
+Writes a character code to a specific location in the L\+CD screen to alert the user that the remote launch is on or off. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em on\+Off} & -\/ byte -\/ H\+I\+GH = Remote Launch on, L\+OW = Remote Launch off \\
+\hline
+\end{DoxyParams}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!report\+Safety\+Status@{report\+Safety\+Status}}
+\index{report\+Safety\+Status@{report\+Safety\+Status}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{report\+Safety\+Status(byte on\+Off)}{reportSafetyStatus(byte onOff)}}]{\setlength{\rightskip}{0pt plus 5cm}void report\+Safety\+Status (
+\begin{DoxyParamCaption}
+\item[{byte}]{on\+Off}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_a47f529525de58eb550617cd09e49ecfe}{}\label{masterPanel_8ino_a47f529525de58eb550617cd09e49ecfe}
+
+
+Writes a character code to a specific location in the L\+CD screen to alert the user that the safety is on or off. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em on\+Off} & -\/ byte -\/ H\+I\+GH = safety on, L\+OW = safety off \\
+\hline
+\end{DoxyParams}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!set\+Arm\+Switch\+Led\+State@{set\+Arm\+Switch\+Led\+State}}
+\index{set\+Arm\+Switch\+Led\+State@{set\+Arm\+Switch\+Led\+State}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{set\+Arm\+Switch\+Led\+State(int state)}{setArmSwitchLedState(int state)}}]{\setlength{\rightskip}{0pt plus 5cm}void set\+Arm\+Switch\+Led\+State (
+\begin{DoxyParamCaption}
+\item[{int}]{state}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_a407b3e38ec5a6e70511c19cf0c03b89d}{}\label{masterPanel_8ino_a407b3e38ec5a6e70511c19cf0c03b89d}
+
+
+Supplies power to the Arm Switch and therefore supplies power to both the switch and the L\+ED. 
+
+The L\+ED dues not light up unless it has both power and the switch is in the on position.
+
+
+\begin{DoxyParams}{Parameters}
+{\em state} & -\/ (int) 0 = turn off. all other values = turn on. \\
+\hline
+\end{DoxyParams}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!set\+Launch\+Button\+Led\+State@{set\+Launch\+Button\+Led\+State}}
+\index{set\+Launch\+Button\+Led\+State@{set\+Launch\+Button\+Led\+State}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{set\+Launch\+Button\+Led\+State(int state)}{setLaunchButtonLedState(int state)}}]{\setlength{\rightskip}{0pt plus 5cm}void set\+Launch\+Button\+Led\+State (
+\begin{DoxyParamCaption}
+\item[{int}]{state}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_a036de83adbfc4e042ffb2985e566dd46}{}\label{masterPanel_8ino_a036de83adbfc4e042ffb2985e566dd46}
+
+
+Turns the Launch button L\+ED on or off. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em state} & -\/ (int) 0 = turn off. all other values = turn on. \\
+\hline
+\end{DoxyParams}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!setup@{setup}}
+\index{setup@{setup}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{setup()}{setup()}}]{\setlength{\rightskip}{0pt plus 5cm}void setup (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_a4fc01d736fe50cf5b977f755b675f11d}{}\label{masterPanel_8ino_a4fc01d736fe50cf5b977f755b675f11d}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!write\+Zigbee\+Pad@{write\+Zigbee\+Pad}}
+\index{write\+Zigbee\+Pad@{write\+Zigbee\+Pad}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{write\+Zigbee\+Pad()}{writeZigbeePad()}}]{\setlength{\rightskip}{0pt plus 5cm}void write\+Zigbee\+Pad (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_a5c5a3e1e876636d4fe4d0fd95c3faa94}{}\label{masterPanel_8ino_a5c5a3e1e876636d4fe4d0fd95c3faa94}
+
+
+Checks the current state of the master controller swiches, updates the data appropriate for the Pad Controller and sends a data packet to the Pad Controller via Zigbee. 
+
+All variables are stored in the class instance. \index{master\+Panel.\+ino@{master\+Panel.\+ino}!write\+Zigbee\+Remote@{write\+Zigbee\+Remote}}
+\index{write\+Zigbee\+Remote@{write\+Zigbee\+Remote}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{write\+Zigbee\+Remote()}{writeZigbeeRemote()}}]{\setlength{\rightskip}{0pt plus 5cm}void write\+Zigbee\+Remote (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{masterPanel_8ino_a31e996ec809ac8f9c7b059e9ec1662dd}{}\label{masterPanel_8ino_a31e996ec809ac8f9c7b059e9ec1662dd}
+
+
+Checks the current state of the master controller swiches, updates the data appropriate for the Remote Controller and sends a data packet to the Remote Controller via Zigbee. 
+
+All variables are stored in the class instance. 
+
+\subsection{Variable Documentation}
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!adc\+\_\+key\+\_\+in@{adc\+\_\+key\+\_\+in}}
+\index{adc\+\_\+key\+\_\+in@{adc\+\_\+key\+\_\+in}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{adc\+\_\+key\+\_\+in}{adc\_key\_in}}]{\setlength{\rightskip}{0pt plus 5cm}int adc\+\_\+key\+\_\+in}\hypertarget{masterPanel_8ino_a0cea6186dd3e0885b2ab52d918f062ad}{}\label{masterPanel_8ino_a0cea6186dd3e0885b2ab52d918f062ad}
+
+
+Store the Analog Input Value when reading the 3 push buttons. 
+
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!adc\+\_\+key\+\_\+val@{adc\+\_\+key\+\_\+val}}
+\index{adc\+\_\+key\+\_\+val@{adc\+\_\+key\+\_\+val}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{adc\+\_\+key\+\_\+val}{adc\_key\_val}}]{\setlength{\rightskip}{0pt plus 5cm}const int adc\+\_\+key\+\_\+val\mbox{[}5\mbox{]} =\{30, 360, 760 \}\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{masterPanel_8ino_a3825b3540381c5eacce025d7c96ec83a}{}\label{masterPanel_8ino_a3825b3540381c5eacce025d7c96ec83a}
+
+
+Define the Analog values which correspond to the three momentary push buttons installed in the Master Panel. 
+
+The buttons on the L\+CD shield are read using the Analog pin \#0. We will not be using the buttons on the shield, but we will use Analog pin \#0 to read our buttons in the same way the Shield uses Analog pin \#0. \index{master\+Panel.\+ino@{master\+Panel.\+ino}!data@{data}}
+\index{data@{data}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{data}{data}}]{\setlength{\rightskip}{0pt plus 5cm}Launch\+Data\+Packet data = Launch\+Data\+Packet({\bf xbee})}\hypertarget{masterPanel_8ino_a2581ee7316bbd0b2c1f26d7892d9383b}{}\label{masterPanel_8ino_a2581ee7316bbd0b2c1f26d7892d9383b}
+
+
+Instance of the Launch\+Data\+Packet Class. 
+
+Create an instance of the Launch\+Data\+Packet Class. Only one instance created. This class decyphers all data being passed between the Master Panel, the Remote Panel, and the Launch Pad. \index{master\+Panel.\+ino@{master\+Panel.\+ino}!key@{key}}
+\index{key@{key}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{key}{key}}]{\setlength{\rightskip}{0pt plus 5cm}int key =-\/1}\hypertarget{masterPanel_8ino_a35af0be900467fedbb610bd6ea65ed78}{}\label{masterPanel_8ino_a35af0be900467fedbb610bd6ea65ed78}
+
+
+Once we decypher the button pushed, store the button \# here. 
+
+Since there are three buttons, the values are -\/1, 1, 2, and 3. -\/1 is when no button is pushed. \index{master\+Panel.\+ino@{master\+Panel.\+ino}!lcd@{lcd}}
+\index{lcd@{lcd}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{lcd}{lcd}}]{\setlength{\rightskip}{0pt plus 5cm}L\+C\+D4\+Bit\+\_\+mod lcd = L\+C\+D4\+Bit\+\_\+mod(2)}\hypertarget{masterPanel_8ino_a41dddf59ae53b20320d0abf3498a563f}{}\label{masterPanel_8ino_a41dddf59ae53b20320d0abf3498a563f}
+
+
+Create object to control an L\+CD with 2 lines of text. 
+
+L\+CD controls bits 4,5,6,7,8,9,and 10. These bits cannot be used for input or output by anything else unless you have knowledge of how the L\+CD shield and L\+CD library operate. \index{master\+Panel.\+ino@{master\+Panel.\+ino}!N\+U\+M\+\_\+\+K\+E\+YS@{N\+U\+M\+\_\+\+K\+E\+YS}}
+\index{N\+U\+M\+\_\+\+K\+E\+YS@{N\+U\+M\+\_\+\+K\+E\+YS}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{N\+U\+M\+\_\+\+K\+E\+YS}{NUM\_KEYS}}]{\setlength{\rightskip}{0pt plus 5cm}const int N\+U\+M\+\_\+\+K\+E\+YS = 3\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{masterPanel_8ino_a872c8b81f62c5a5afb73ba8e93422e1c}{}\label{masterPanel_8ino_a872c8b81f62c5a5afb73ba8e93422e1c}
+
+
+Define the number of buttons to be read using Analog pin \#0. 
+
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!number@{number}}
+\index{number@{number}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{number}{number}}]{\setlength{\rightskip}{0pt plus 5cm}char number\mbox{[}$\,$\mbox{]}}\hypertarget{masterPanel_8ino_a0ea7c2d76ab718bd82cf6259b26ed3ed}{}\label{masterPanel_8ino_a0ea7c2d76ab718bd82cf6259b26ed3ed}
+
+
+Character string for storing integers to be displayed on the L\+CD screen. 
+
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!oldkey@{oldkey}}
+\index{oldkey@{oldkey}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{oldkey}{oldkey}}]{\setlength{\rightskip}{0pt plus 5cm}int oldkey =-\/1}\hypertarget{masterPanel_8ino_ab3d48dbe76030874dd18eb3c6780330e}{}\label{masterPanel_8ino_ab3d48dbe76030874dd18eb3c6780330e}
+
+
+Store the previous button pushed. 
+
+When a button is pushed once, it will be detected multiple times in a row. By storing the previus button pushed, we can detect the first moment a button is pushed and rule out subsequent detections. \index{master\+Panel.\+ino@{master\+Panel.\+ino}!pressure\+Cal1@{pressure\+Cal1}}
+\index{pressure\+Cal1@{pressure\+Cal1}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{pressure\+Cal1}{pressureCal1}}]{\setlength{\rightskip}{0pt plus 5cm}int pressure\+Cal1}\hypertarget{masterPanel_8ino_a3e1010b728ac3d5d91ffc657006d630f}{}\label{masterPanel_8ino_a3e1010b728ac3d5d91ffc657006d630f}
+
+
+Store the Analog Input value for the pressure calibration P\+OT \#1. 
+
+P\+OT \#1 is inside the Master Panel, but it calibrates the pressure reading obtained from launch pad \#1. \index{master\+Panel.\+ino@{master\+Panel.\+ino}!pressure\+Cal2@{pressure\+Cal2}}
+\index{pressure\+Cal2@{pressure\+Cal2}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{pressure\+Cal2}{pressureCal2}}]{\setlength{\rightskip}{0pt plus 5cm}int pressure\+Cal2}\hypertarget{masterPanel_8ino_a686c48254491c41288fdf685b232594d}{}\label{masterPanel_8ino_a686c48254491c41288fdf685b232594d}
+
+
+Store the Analog Input value for the pressure calibration P\+OT \#2. 
+
+P\+OT \#2 is inside the Master Panel, but it calibrates the pressure reading obtained from launch pad \#2. \index{master\+Panel.\+ino@{master\+Panel.\+ino}!pulse@{pulse}}
+\index{pulse@{pulse}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{pulse}{pulse}}]{\setlength{\rightskip}{0pt plus 5cm}byte pulse = 0}\hypertarget{masterPanel_8ino_a3122ae67163a917df3ce95816c7c44e7}{}\label{masterPanel_8ino_a3122ae67163a917df3ce95816c7c44e7}
+
+
+Track the on/off state of the launch button L\+ED when the L\+ED is flashing. 
+
+\index{master\+Panel.\+ino@{master\+Panel.\+ino}!time\+Since\+Last\+Pad\+Signal@{time\+Since\+Last\+Pad\+Signal}}
+\index{time\+Since\+Last\+Pad\+Signal@{time\+Since\+Last\+Pad\+Signal}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{time\+Since\+Last\+Pad\+Signal}{timeSinceLastPadSignal}}]{\setlength{\rightskip}{0pt plus 5cm}long time\+Since\+Last\+Pad\+Signal = 0}\hypertarget{masterPanel_8ino_af44f6a2e4c00006fb058d00348168159}{}\label{masterPanel_8ino_af44f6a2e4c00006fb058d00348168159}
+
+
+Time since the last good Zigbee communication with the launch pad. 
+
+Used to monitor a timeout error. \index{master\+Panel.\+ino@{master\+Panel.\+ino}!time\+Since\+Last\+Pulse@{time\+Since\+Last\+Pulse}}
+\index{time\+Since\+Last\+Pulse@{time\+Since\+Last\+Pulse}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{time\+Since\+Last\+Pulse}{timeSinceLastPulse}}]{\setlength{\rightskip}{0pt plus 5cm}long time\+Since\+Last\+Pulse = 0}\hypertarget{masterPanel_8ino_af8d9d76d18b6aee4b209d4f3b9f2d8d3}{}\label{masterPanel_8ino_af8d9d76d18b6aee4b209d4f3b9f2d8d3}
+
+
+Time since the last toggle of the L\+ED on/off status. 
+
+Used to control the flashing of the L\+ED. \index{master\+Panel.\+ino@{master\+Panel.\+ino}!time\+Since\+Last\+Remote\+Signal@{time\+Since\+Last\+Remote\+Signal}}
+\index{time\+Since\+Last\+Remote\+Signal@{time\+Since\+Last\+Remote\+Signal}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{time\+Since\+Last\+Remote\+Signal}{timeSinceLastRemoteSignal}}]{\setlength{\rightskip}{0pt plus 5cm}long time\+Since\+Last\+Remote\+Signal = 0}\hypertarget{masterPanel_8ino_a3840f059f2cf5d2544a8eb65120ecc31}{}\label{masterPanel_8ino_a3840f059f2cf5d2544a8eb65120ecc31}
+
+
+Time since the last good Zigbee communication with the Remote Panel. 
+
+Used to monitor a timeout error. \index{master\+Panel.\+ino@{master\+Panel.\+ino}!xbee@{xbee}}
+\index{xbee@{xbee}!master\+Panel.\+ino@{master\+Panel.\+ino}}
+\subsubsection[{\texorpdfstring{xbee}{xbee}}]{\setlength{\rightskip}{0pt plus 5cm}X\+Bee xbee = X\+Bee()}\hypertarget{masterPanel_8ino_a18bbd7dece9ef587254b08710426fd17}{}\label{masterPanel_8ino_a18bbd7dece9ef587254b08710426fd17}
+
+
+Instance of the Zigbee Class. 
+
+Only one instance created. It is used to control/perform handshakes and other communications with the other Zigbee devices in the Zigbee wireless network. 
